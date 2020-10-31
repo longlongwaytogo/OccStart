@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(COccEditorView, CView)
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_COMMAND(ID_SPHERE, &COccEditorView::OnSphere)
+	ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 // COccEditorView 构造/析构
@@ -71,7 +72,13 @@ void COccEditorView::OnDraw(CDC* /*pDC*/)
 	if (!pDoc)
 		return;
 	if(m_hView)
+	{
 		m_hView->Redraw();
+
+		/*m_hView->MustBeResized(); 
+		m_hView->Update(); */
+	}
+
 	// TODO: 在此处为本机数据添加绘制代码
 }
 
@@ -209,4 +216,13 @@ void COccEditorView::OnSphere()
 {
 	// TODO: 在此添加命令处理程序代码
 	DrawSphere(6);
+}
+
+
+void COccEditorView::OnSize(UINT nType, int cx, int cy)
+{
+	CView::OnSize(nType, cx, cy);
+	if(m_hView)
+		m_hView->MustBeResized();
+	// TODO: 在此处添加消息处理程序代码
 }

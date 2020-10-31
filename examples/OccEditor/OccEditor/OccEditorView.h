@@ -65,6 +65,7 @@ public:
 	void DrawSphere(float radius = 1);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnSphere();
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 };
 
 #ifndef _DEBUG  // OccEditorView.cpp 中的调试版本
