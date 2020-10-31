@@ -66,3 +66,18 @@
 #endif
 
 
+#pragma warning(  disable : 4244 )        // Issue warning 4244
+#include "Standard_ShortReal.hxx"
+#pragma warning(  default : 4244 )        // Issue warning 4244
+
+#include <Standard.hxx>
+
+#include <Aspect_DisplayConnection.hxx>
+#include <AIS_InteractiveContext.hxx>
+#include <AIS_Shape.hxx>
+#include <AIS_Point.hxx>
+#include <V3d_Viewer.hxx>
+#include <V3d_View.hxx>
+#include <OpenGl_GraphicDriver.hxx>
+#include <WNT_Window.hxx>
+#include <Standard_ErrorHandler.hxx>

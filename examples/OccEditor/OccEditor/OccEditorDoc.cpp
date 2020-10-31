@@ -23,9 +23,9 @@
 
 #include <propkey.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#endif
 
 // COccEditorDoc
 
@@ -52,6 +52,9 @@ BOOL COccEditorDoc::OnNewDocument()
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
+	InitOCC();
+	
+
 	// TODO: 在此添加重新初始化代码
 	// (SDI 文档将重用该文档)
 
@@ -59,7 +62,24 @@ BOOL COccEditorDoc::OnNewDocument()
 }
 
 
-
+BOOL COccEditorDoc::InitOCC()
+{
+	Handle(Graphic3d_GraphicDriver) aGraphicDriver = ((COccEditorApp*)AfxGetApp())->GetGraphicDriver();
+	m_hViewer = new V3d_Viewer(aGraphicDriver); 
+ 
+	m_hViewer->SetDefaultLights();
+	m_hViewer->SetLightOn();
+	//myViewer->SetDefaultBackgroundColor(Quantity_NOC_BLUE1);//改变背景颜色
+ 
+	m_hAISContext =new AIS_InteractiveContext(m_hViewer);  //创建一个交互文档
+	//m_hAISContext->DefaultDrawer()->UIsoAspect()->SetNumber(11);
+	//m_hAISContext->DefaultDrawer()->VIsoAspect()->SetNumber(11);
+ 
+	//这里设置实体的显示模式
+	m_hAISContext->SetDisplayMode(AIS_Shaded,Standard_True);
+	m_hAISContext->SetAutomaticHilight(Standard_False);
+	return TRUE;
+}
 
 // COccEditorDoc 序列化
 
@@ -73,7 +93,9 @@ void COccEditorDoc::Serialize(CArchive& ar)
 	{
 		// TODO: 在此添加加载代码
 	}
+	
 }
+
 
 #ifdef SHARED_HANDLERS
 

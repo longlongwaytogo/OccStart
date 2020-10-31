@@ -22,9 +22,9 @@
 #include "OccEditorDoc.h"
 #include "OccEditorView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#endif
 
 
 // COccEditorView
@@ -38,6 +38,8 @@ BEGIN_MESSAGE_MAP(COccEditorView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &COccEditorView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+	ON_WM_MOUSEMOVE()
+	ON_COMMAND(ID_SPHERE, &COccEditorView::OnSphere)
 END_MESSAGE_MAP()
 
 // COccEditorView 构造/析构
@@ -68,10 +70,32 @@ void COccEditorView::OnDraw(CDC* /*pDC*/)
 	ASSERT_VALID(pDoc);
 	if (!pDoc)
 		return;
-
+	if(m_hView)
+		m_hView->Redraw();
 	// TODO: 在此处为本机数据添加绘制代码
 }
 
+#include <BRepPrimAPI_MakeSphere.hxx> 
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Shape.hxx>
+
+void COccEditorView::DrawSphere(float radius)
+{
+	BRepPrimAPI_MakeSphere mkSphere(radius);
+	TopoDS_Shape Sphere = mkSphere.Shape();
+	Handle(AIS_Shape) myAISSphere = new AIS_Shape(Sphere);
+	GetDocument()->GetAISContext()->Display(myAISSphere, Standard_False);
+	
+	FitAll();
+}
+
+
+void COccEditorView::FitAll() 
+{ 
+	if (!m_hView.IsNull()) 
+		m_hView->FitAll();
+	m_hView->ZFitAll();
+}
 
 // COccEditorView 打印
 
@@ -135,3 +159,54 @@ COccEditorDoc* COccEditorView::GetDocument() const // 非调试版本是内联的
 
 
 // COccEditorView 消息处理程序
+
+
+void COccEditorView::OnInitialUpdate()
+{
+	CView::OnInitialUpdate();
+	m_bHlrModeIsOn  = Standard_False;
+	m_hView = GetDocument()->GetViewer()->CreateView();
+	m_hView->SetComputedMode(m_bHlrModeIsOn);
+	Handle(Graphic3d_GraphicDriver) graphicDriver = ((COccEditorApp*)AfxGetApp())->GetGraphicDriver();
+ 
+	Handle(WNT_Window) hWntWindow = new WNT_Window(GetSafeHwnd());
+	m_hView->SetWindow(hWntWindow);
+	if (!hWntWindow->IsMapped()) {
+		hWntWindow->Map();
+	}
+	hWntWindow->SetBackground(Quantity_NOC_SLATEBLUE2);
+
+//Standard_Integer w = 100;
+//Standard_Integer h = 100;
+//aWntWindow->Size(w, h);
+//::PostMessage(GetSafeHwnd(), WM_SIZE, SIZE_RESTORED, w + h * 65536);
+	//m_hView->FitAll();
+
+	FitAll();
+
+	//m_hView->ZBufferTriedronSetup(Quantity_NOC_RED, Quantity_NOC_GREEN, Quantity_NOC_BLUE1, 0.8, 0.05, 12);
+	//m_hView->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_WHITE, 0.2, V3d_ZBUFFER);
+
+
+	// TODO: 在此添加专用代码和/或调用基类
+}
+
+
+void COccEditorView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CView::OnMouseMove(nFlags, point);
+
+    if(nFlags && MK_LBUTTON){ 
+    //myView->Rotate(point.x,point.y); 
+    m_hView->Rotation(point.x,point.y); 
+    } 
+
+}
+
+
+void COccEditorView::OnSphere()
+{
+	// TODO: 在此添加命令处理程序代码
+	DrawSphere(6);
+}

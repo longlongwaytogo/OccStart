@@ -21,9 +21,9 @@
 #include "OccEditorDoc.h"
 #include "OccEditorView.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+//#ifdef _DEBUG
+//#define new DEBUG_NEW
+//#endif
 
 
 // COccEditorApp
@@ -82,6 +82,17 @@ BOOL COccEditorApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
+	// init occ
+	try
+	{
+		Handle(Aspect_DisplayConnection) aDisplayConnection;
+		m_hGraphicDriver = new OpenGl_GraphicDriver (aDisplayConnection);
+	}
+	catch(Standard_Failure)
+	{
+		AfxMessageBox (_T("Fatal error during graphic initialization"), MB_ICONSTOP);
+		ExitProcess(1);
+	}
 
 	// 初始化 OLE 库
 	if (!AfxOleInit())
@@ -164,6 +175,8 @@ int COccEditorApp::ExitInstance()
 	return CWinAppEx::ExitInstance();
 }
 
+
+
 // COccEditorApp 消息处理程序
 
 
@@ -223,6 +236,11 @@ void COccEditorApp::SaveCustomState()
 {
 }
 
+
+Handle_Graphic3d_GraphicDriver COccEditorApp::GetGraphicDriver() const
+{
+	return m_hGraphicDriver;
+}
 // COccEditorApp 消息处理程序
 
 

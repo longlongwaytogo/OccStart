@@ -24,6 +24,9 @@
 // 有关此类的实现，请参阅 OccEditor.cpp
 //
 
+#include <Standard_Macro.hxx>
+#include <Graphic3d_GraphicDriver.hxx>
+
 class COccEditorApp : public CWinAppEx
 {
 public:
@@ -45,6 +48,12 @@ public:
 
 	afx_msg void OnAppAbout();
 	DECLARE_MESSAGE_MAP()
+
+public:
+	Handle_Graphic3d_GraphicDriver GetGraphicDriver() const; 
+private:
+	Handle_Graphic3d_GraphicDriver m_hGraphicDriver;
+
 };
 
 extern COccEditorApp theApp;

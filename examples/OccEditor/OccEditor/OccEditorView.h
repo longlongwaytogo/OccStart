@@ -53,6 +53,18 @@ protected:
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	DECLARE_MESSAGE_MAP()
+
+	void Display();
+private:
+	Handle_V3d_View m_hView;
+	Standard_Boolean m_bHlrModeIsOn;
+	
+public:	
+	virtual void OnInitialUpdate();
+	void FitAll();
+	void DrawSphere(float radius = 1);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg void OnSphere();
 };
 
 #ifndef _DEBUG  // OccEditorView.cpp 中的调试版本
