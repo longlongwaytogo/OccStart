@@ -61,6 +61,8 @@ BOOL COccEditorDoc::OnNewDocument()
 	return TRUE;
 }
 
+#include "AIS_Trihedron.hxx"
+#include "Geom_Axis2Placement.hxx"
 
 BOOL COccEditorDoc::InitOCC()
 {
@@ -78,6 +80,12 @@ BOOL COccEditorDoc::InitOCC()
 	//这里设置实体的显示模式
 	m_hAISContext->SetDisplayMode(AIS_Shaded,Standard_True);
 	m_hAISContext->SetAutomaticHilight(Standard_False);
+
+	//Handle(AIS_Trihedron) myTrihedron;
+	//Handle(Geom_Axis2Placement) myTrihedronAxis=new Geom_Axis2Placement(gp::XOY());
+	//myTrihedron=new AIS_Trihedron(myTrihedronAxis);
+	//m_hAISContext->Display(myTrihedron,Standard_False);
+	
 	return TRUE;
 }
 

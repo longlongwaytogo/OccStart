@@ -73,17 +73,15 @@ void COccEditorView::OnDraw(CDC* /*pDC*/)
 		return;
 	if(m_hView)
 	{
+		//m_hView->MustBeResized();
+		m_hView->Update(); 
 		m_hView->Redraw();
-
-		/*m_hView->MustBeResized(); 
-		m_hView->Update(); */
 	}
 
 	// TODO: 在此处为本机数据添加绘制代码
 }
 
 #include <BRepPrimAPI_MakeSphere.hxx> 
-#include <TopoDS_Shape.hxx>
 #include <TopoDS_Shape.hxx>
 
 void COccEditorView::DrawSphere(float radius)
@@ -183,17 +181,18 @@ void COccEditorView::OnInitialUpdate()
 	}
 	hWntWindow->SetBackground(Quantity_NOC_SLATEBLUE2);
 
-//Standard_Integer w = 100;
-//Standard_Integer h = 100;
-//aWntWindow->Size(w, h);
-//::PostMessage(GetSafeHwnd(), WM_SIZE, SIZE_RESTORED, w + h * 65536);
-	//m_hView->FitAll();
+	//Standard_Integer w = 100;
+
+	//Standard_Integer h = 100;
+	//hWntWindow->Size(w, h);
+//	::PostMessage(GetSafeHwnd(), WM_SIZE, SIZE_RESTORED, w + h * 65536);
 
 	FitAll();
-
-	//m_hView->ZBufferTriedronSetup(Quantity_NOC_RED, Quantity_NOC_GREEN, Quantity_NOC_BLUE1, 0.8, 0.05, 12);
-	//m_hView->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_WHITE, 0.2, V3d_ZBUFFER);
-
+	// 构建OpenCaseCade坐标轴
+	m_hView->ZBufferTriedronSetup(Quantity_NOC_RED, Quantity_NOC_GREEN, Quantity_NOC_BLUE1, 0.8, 0.05, 12);
+	m_hView->TriedronDisplay(Aspect_TOTP_LEFT_LOWER, Quantity_NOC_WHITE, 0.2, V3d_ZBUFFER);
+	 
+	
 
 	// TODO: 在此添加专用代码和/或调用基类
 }
@@ -207,6 +206,7 @@ void COccEditorView::OnMouseMove(UINT nFlags, CPoint point)
     if(nFlags && MK_LBUTTON){ 
     //myView->Rotate(point.x,point.y); 
     m_hView->Rotation(point.x,point.y); 
+	//m_hView->Update();
     } 
 
 }
